@@ -409,6 +409,10 @@ KOMA-script documentation for details.}]{fancyhdr}
 %----------------------------------------------------------------------------------------
 %	ABSTRACT PAGE DESIGN
 %----------------------------------------------------------------------------------------
+%\newcommand{\abstractname}{Abstract}
+%\providecaptionname{american,australian,british,canadian,english,newzealand,UKenglish,USenglish} {\abstractname}{Abstract} % Acknowledgement text for English countries
+%\providecaptionname{german,ngerman,austrian,naustrian}{\acknowledgementname}{Danksagung} % Acknowledgement text for Germanic countries
+
 
 \newenvironment{abstract}{
 	\checktoopen
@@ -450,8 +454,9 @@ KOMA-script documentation for details.}]{fancyhdr}
 %	DEFINE NEW CAPTION NAMES
 %----------------------------------------------------------------------------------------
 
-\newcaptionname{spanish}{\lstlistingname}{C\'{o}digo}      %Listing
+\newcaptionname{spanish}{\lstlistingname}{C\'{o}digo}      %Listing  
 \newcaptionname{spanish}{\acknowledgementname}{Agradecimientos}
+%\newcaptionname{spanish}{\abstractname}{R\'{e}sumen}
 \newcaptionname{spanish}{\authorshipname}{Declaración de Autoría}
 \newcaptionname{spanish}{\abbrevname}{Glosario}
 \newcaptionname{spanish}{\byname}{por}
