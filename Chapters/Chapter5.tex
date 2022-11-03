@@ -14,17 +14,35 @@ En esta sección se detalla el nivel de cumplimiento de los requerimientos como 
 
 \section{Resultados obtenidos}
 
-La idea de esta sección es resaltar cuáles son los principales aportes del trabajo realizado y cómo se podría continuar. Debe ser especialmente breve y concisa. Es buena idea usar un listado para enumerar los logros obtenidos.
 
-Algunas preguntas que pueden servir para completar este capítulo:
+Basados en la primera versión del sistema de monitoreo de centrales de alarma de incendio (SMCAI) desarrollado como trabajo final de la CESE, se logró implementar de forma exitosa un sistema de monitoreo remoto, que describe en detalle el estado de una central de alarma de incendio de la marca Simplex (SMCAI-S).
 
+El nivel de detalle que proporciona el SMCAI-S, es debido a que utiliza la interfaz de comandos Telnet de la marca Simplex. De esta manera se establece una interfaz que provee las siguientes funcionalidades:
 \begin{itemize}
-\item ¿Cuál es el grado de cumplimiento de los requerimientos?
-\item ¿Cuán fielmente se puedo seguir la planificación original (cronograma incluido)?
-\item ¿Se manifestó algunos de los riesgos identificados en la planificación? ¿Fue efectivo el plan de mitigación? ¿Se debió aplicar alguna otra acción no contemplada previamente?
-\item Si se debieron hacer modificaciones a lo planificado ¿Cuáles fueron las causas y los efectos?
-\item ¿Qué técnicas resultaron útiles para el desarrollo del proyecto y cuáles no tanto?
+\item Monitoreo detallado del estado del sistema de detección de incendios.
+\item Interfaz web con acceso desde cualquier parte del mundo.
+\item Servicio de mensajería instantánea a través de un bot de Telegram.
+\item Plataforma funcional y escalable sin restricciones asociadas al número de centrales.
 \end{itemize}
+
+Actualmente el SMCAI-S se ejecuta en un hardware orientado a prototipado y uso general, lo que brindó la flexibilidad necesaria para disminuir los tiempos de desarrollo. Elemento clave para definir un producto mínimo viable junto con los colaboradores de la empresa Isolse srl. Sin embargo, se considera que para efectos comerciales, es recomendable contar con un sistema de hardware propio basado en los requerimientos.
+
+A partir del análisis de la normativa de incendio NFPA 72, se diseñó un esquema de conectividad que resguarda la integridad de la CAI. Asimismo, el esquema considera que además de la interconectividad, un punto crítico del sistema es la conexión a la red, es por ello que el análisis de riesgos del sistema impulsó la incorporación de una conexión redundante a la red. 
+
+La combinación de este trabajo (SMCAI-S) en conjunto con el sistema realizado previamente (SMCAI), proporcionan una plataforma de monitoreo sumamente completa con las siguientes características:
+\begin{itemize}
+\item CAI de marca diferente a Simplex: se indica la condición de la central mediante los estados de alarma, falla o normal.  
+\item CAI de marca Simplex: se brinda un detalle completo de todos los eventos que se presenten, a través de la siguiente nomenclatura por cada dispositivo:
+\begin{itemize}
+	\item ID: corresponde a un código único por dispositivo.
+	\item Etiqueta: texto de 40 caracteres nomenclados en base a la ubicación física del dispositivo en la instalación.
+	\item Tipo: tecnología de detección utilizada por el dispositivo.
+	\item Estado: texto descriptivo de la condición presente en el dispositivo.
+\end{itemize}
+\end{itemize}
+
+Finalmente, debido a complicaciones con la importación de equipos y la apremiante necesidad de una alternativa de monitoreo, el foco del trabajo fue el monitoreo remoto. Por consecuencia objetivos asociados a funcionalidades de mantenimiento y soporte durante el proceso de instalación fueron desestimados por el momento. 
+
 
 
 %----------------------------------------------------------------------------------------
@@ -32,4 +50,24 @@ Algunas preguntas que pueden servir para completar este capítulo:
 %----------------------------------------------------------------------------------------
 \section{Trabajo futuro}
 
-Acá se indica cómo se podría continuar el trabajo más adelante.
+Los trabajos de investigación tecnológica de la empresa Isolse SRL tienen como objetivo innovar dentro del mercado de detección de incendios. En estos momentos los trabajos se orientan al diseño de sistemas y plataformas de validación, es decir prototipos que permitan validar los planteamientos creativos con la finalidad de concretar una propuesta comercial.
+
+A continuación se listan los próximos pasos a seguir para lograr una propuesta comercial sólida con el sistema actual:
+\begin{itemize}
+\item Diseño de hardware específico, con foco en la certificación del producto.
+\item Mejoras al esquema de servicio multi-cliente para el bot de Telegram.
+\item Incorporación de documentación y guías de ayuda adicionales para el menú de ayuda del bot en Telegram.
+\item Implementación de tareas de mantenimiento, prueba y validación de la instalación de las CAI de marca Simplex.
+\item Incluir la decodificación de los protocolos de comunicación de otras marcas comerciales de CAI.
+\end{itemize}
+
+Una vez obtenida una propuesta comercial viable, se abre una nueva línea de investigación y desarrollo tecnológico. El objetivo de esta investigación es aprovechar la información registrada por la plataforma actual, y brindar nuevos servicios como:
+\begin{itemize}
+\item Sistema de análisis de fallas predictivo.
+\item Sistema de mantenimiento preventivo.
+\item Herramienta de análisis de calidad de instalación.
+\item Sistema de monitoreo basado en los planos de la instalación.
+\item Integración de servicios de monitoreo de terceros.
+\item Aplicación para dispositivos móviles.
+\item Integración con softwares comerciales de gestión de edificios, por ejemplo marcas como: Siemens, Honeywell, Johnson Controls.
+\end{itemize}
