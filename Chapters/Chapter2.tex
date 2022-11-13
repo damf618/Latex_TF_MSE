@@ -3,200 +3,80 @@
 \label{Chapter2}
 
 %----------------------------------------------------------------------------------------
-%	SECTION 1
+%    SECTION 1
 %----------------------------------------------------------------------------------------
-Todos los capítulos deben comenzar con un breve párrafo introductorio que indique cuál es el contenido que se encontrará al leerlo.  La redacción sobre el contenido de la memoria debe hacerse en presente y todo lo referido al proyecto en pasado, siempre de modo impersonal.
+En este capítulo se detallan las tecnologías utilizadas para el desarrollo del firmware, software y las plataformas necesarias para el funcionamiento del sistema.
 
-\section{Estilo y convenciones}
-\label{sec:ejemplo}
+\section{Centrales de alarma de incendio Simplex}
+En los SDAI es común que los fabricantes incluyan un puerto para comunicación con dispositivos externos de registro de eventos, como por ejemplo impresoras. Estos puertos usualmente utilizan el protocolo RS232 \citep{rs232}, lo que hace posible registrar la información en un protocolo estándar en el ámbito industrial y de sistemas embebidos. En el caso de la marca Simplex, adicional a este puerto se incluye una terminal de comandos Telnet \citep{telnet} que obedece a un set de comandos. Esta interfaz sirve como herramienta de depuración durante la instalación de la CAI. Los comandos permiten confirmar elementos de programación tales como el accionamiento de los dispositivos de notificación, la ejecución del protocolo de evacuación, la información de todos los dispositivos instalados, y diversas funcionalidades avanzadas.
 
-\subsection{Uso de mayúscula inicial para los título de secciones}
+El uso de los comandos y su correcta interpretación requiere horas de capacitación y práctica, por lo que se podría considerar que existe una curva de aprendizaje considerable para el manejo de esta terminal. Esto se debe principalmente a que se requiere contar con conocimientos en diferentes aspectos del equipo como: el lenguaje de programación que utiliza, la nomenclatura del fabricante, el set de comandos de la marca, la estructura del programa en texto estructurado y la nomenclatura regulada de la NFPA, entre otros.  El acceso a este puerto suele recomendarse posterior a la segunda capacitación técnica oficial de la marca Simplex debido a su complejidad. En la figura \ref{fig:telnet} se puede observar un esquema que explica el funcionamiento del puerto.
 
-Si en el texto se hace alusión a diferentes partes del trabajo referirse a ellas como capítulo, sección o subsección según corresponda. Por ejemplo: ``En el capítulo \ref{Chapter1} se explica tal cosa'', o ``En la sección \ref{sec:ejemplo} se presenta lo que sea'', o ``En la subsección \ref{subsec:ejemplo} se discute otra cosa''.
+\begin{figure}[ht]
+   \centering
+   \includegraphics[scale=.45]{./Figures/telnet.jpg}
+   \caption{Diagrama de notificaciones mediante puerto de servicio.}
+   \label{fig:telnet}
+\end{figure}
 
-Cuando se quiere poner una lista tabulada, se hace así:
+
+Considerando las características detalladas, el sistema actual se enfoca en el uso del puerto de comunicación Telnet para expandir los servicios a brindar por el SMAI. Al utilizar el puerto Telnet, se puede disponer de una plataforma que extraiga el detalle de los eventos de la central, y los facilite al usuario mediante Firebase. El objetivo principal es desarrollar un sistema de monitoreo de la CAI con el mayor detalle posible, pero a la vez es de especial interés facilitar el uso de esta plataforma para acelerar las tareas de instalación y mantenimiento de los SDAI Simplex.
+
+
+\section{Sistema de monitoreo propuesto}
+
+El sistema de monitoreo de alarma de incendio que se propone se compone de diferentes módulos. Como se puede observar en la figura \ref{fig:modulo}, cada módulo hace uso de una herramienta particular con los siguientes objetivos:
 
 \begin{itemize}
-	\item Este es el primer elemento de la lista.
-	\item Este es el segundo elemento de la lista.
+\item \textit{Single Board Computer}: plataforma de desarrollo de hardware abierto con soporte para Linux embebido. Las plataformas utilizadas cuentan con soporte de sus comunidades, gran cantidad de tutoriales y documentación. \citep{bbb}.
+\item Node-RED: herramienta de programación por bloques que permite la rápida integración de tecnologías y dispositivos. La herramienta permite integrar funcionalidades y servicios de forma sencilla, robusta y escalable. \citep{nodered}.
+\item SQLite: biblioteca de funcionalidades que permite generar un motor de búsqueda SQL. El uso de bases de datos permite registrar la información de los eventos y generar un respaldo local de los eventos en caso de fallas de conexión a internet. \citep{sqlite}.
+\item Firebase: plataforma enfocada en el desarrollo rápido de aplicaciones y servicios web que brinda un set completo de servicios. Permite incluir nuevas funcionalidades en pocos pasos y asegura la compatibilidad con todos los servicios suministrados por un mismo proveedor. \citep{fbase}.
+\item Telegram: aplicación de mensajería que se utiliza como alternativa de notificación remota. Provee una estructura respaldada de mensajería instantánea que permite la notificación rápida al usuario.\citep{telegram}.
 \end{itemize}
 
-Notar el uso de las mayúsculas y el punto al final de cada elemento.
-
-Si se desea poner una lista numerada el formato es este:
-
-\begin{enumerate}
-	\item Este es el primer elemento de la lista.
-	\item Este es el segundo elemento de la lista.
-\end{enumerate}
-
-Notar el uso de las mayúsculas y el punto al final de cada elemento.
-
-\subsection{Este es el título de una subsección}
-\label{subsec:ejemplo}
-
-Se recomienda no utilizar \textbf{texto en negritas} en ningún párrafo, ni tampoco texto \underline{subrayado}. En cambio sí se debe utilizar \textit{texto en itálicas} para palabras en un idioma extranjero, al menos la primera vez que aparecen en el texto. En el caso de palabras que estamos inventando se deben utilizar ``comillas'', así como también para citas textuales. Por ejemplo, un \textit{digital filter} es una especie de ``selector'' que permite separar ciertos componentes armónicos en particular.
-
-La escritura debe ser impersonal. Por ejemplo, no utilizar ``el diseño del firmware lo hice de acuerdo con tal principio'', sino ``el firmware fue diseñado utilizando tal principio''. 
-
-El trabajo es algo que al momento de escribir la memoria se supone que ya está concluido, entonces todo lo que se refiera a hacer el trabajo se narra en tiempo pasado, porque es algo que ya ocurrió. Por ejemplo, "se diseñó el firmware empleando la técnica de test driven development".
-
-En cambio, la memoria es algo que está vivo cada vez que el lector la lee. Por eso transcurre siempre en tiempo presente, como por ejemplo:
-
-``En el presente capítulo se da una visión global sobre las distintas pruebas realizadas y los resultados obtenidos. Se explica el modo en que fueron llevados a cabo los test unitarios y las pruebas del sistema''.
-
-Se recomienda no utilizar una sección de glosario sino colocar la descripción de las abreviaturas como parte del mismo cuerpo del texto. Por ejemplo, RTOS (\textit{Real Time Operating System}, Sistema Operativo de Tiempo Real) o en caso de considerarlo apropiado mediante notas a pie de página.
-
-Si se desea indicar alguna página web utilizar el siguiente formato de referencias bibliográficas, dónde las referencias se detallan en la sección de bibliografía de la memoria, utilizado el formato establecido por IEEE en \citep{IEEE:citation}. Por ejemplo, ``el presente trabajo se basa en la plataforma EDU-CIAA-NXP \citep{CIAA}, la cual...''.
-
-\subsection{Figuras} 
-
-Al insertar figuras en la memoria se deben considerar determinadas pautas. Para empezar, usar siempre tipografía claramente legible. Luego, tener claro que \textbf{es incorrecto} escribir por ejemplo esto: ``El diseño elegido es un cuadrado, como se ve en la siguiente figura:''
-
-\begin{figure}[h]
-\centering
-\includegraphics[scale=.45]{./Figures/cuadradoAzul.png}
-\end{figure}
-
-La forma correcta de utilizar una figura es con referencias cruzadas, por ejemplo: ``Se eligió utilizar un cuadrado azul para el logo, como puede observarse en la figura \ref{fig:cuadradoAzul}''.
 
 \begin{figure}[ht]
-	\centering
-	\includegraphics[scale=.45]{./Figures/cuadradoAzul.png}
-	\caption{Ilustración del cuadrado azul que se eligió para el diseño del logo.}
-	\label{fig:cuadradoAzul}
+   \centering
+   \includegraphics[scale=.35]{./Figures/modulo.jpg}
+   \caption{Esquema resumido del sistema de monitoreo.}
+   \label{fig:modulo}
 \end{figure}
 
-El texto de las figuras debe estar siempre en español, excepto que se decida reproducir una figura original tomada de alguna referencia. En ese caso la referencia de la cual se tomó la figura debe ser indicada en el epígrafe de la figura e incluida como una nota al pie, como se ilustra en la figura \ref{fig:palabraIngles}.
 
-\begin{figure}[htpb]
-	\centering
-	\includegraphics[scale=.3]{./Figures/word.jpeg}
-	\caption{Imagen tomada de la página oficial del procesador\protect\footnotemark.}
-	\label{fig:palabraIngles}
-\end{figure}
+\section{Plataformas de desarrollo utilizadas}
 
-\footnotetext{Imagen tomada de \url{https://goo.gl/images/i7C70w}}
+\subsection{Plataforma de desarrollo web: Firebase}
+Firebase es una plataforma alojada en la nube, que facilita el desarrollo de aplicaciones web y además integra diferentes servicios como:
+\begin{itemize}
+\item Autenticación: solución al control de acceso de usuarios, set de herramientas que gestionan el acceso de los usuarios de forma segura e incluso la recuperación de credenciales.
+\item Base de datos en tiempo real: sistema de gestión de datos que facilita la sincronización de la información en todos los dispositivos con el acceso correspondiente.
+\item Almacenamiento: servicio de almacenamiento de todo tipo de archivos. De gran utilidad para el intercambio de archivos como manuales, diagramas e ilustraciones por aprte del bot.
+\item \textit{Hosting}: servicio que implementa y mantiene disponible las páginas web requeridas para el reporte de información mediante la web.
+\item Funciones: servicio de ejecución de programas y automatizaciones configurables. Se utiliza para realizar el procesamiento de la información y la coordinación del reporte de eventos al resto de servicios.
+\end{itemize}
 
-La figura y el epígrafe deben conformar una unidad cuyo significado principal pueda ser comprendido por el lector sin necesidad de leer el cuerpo central de la memoria. Para eso es necesario que el epígrafe sea todo lo detallado que corresponda y si en la figura se utilizan abreviaturas entonces aclarar su significado en el epígrafe o en la misma figura.
-
-
+La figura \ref{fig:d_fbase} muestra un esquema de los servicios de Firebase utilizados en el proyecto y su contribución. Los servicios más importantes a resaltar son el de funciones y la base de datos en tiempo real. Entre ambos servicios permiten incluir al sistema diferentes funcionalidades y coordinan los reportes de notificacion.
 
 \begin{figure}[ht]
-	\centering
-	\includegraphics[scale=.37]{./Figures/questionMark.png}
-	\caption{¿Por qué de pronto aparece esta figura?}
-	\label{fig:questionMark}
+   \centering
+   \includegraphics[scale=.35]{./Figures/d_fbase.jpg}
+   \caption{Esquema de servicios de Firebase.}
+   \label{fig:d_fbase}
 \end{figure}
 
-Nunca colocar una figura en el documento antes de hacer la primera referencia a ella, como se ilustra con la figura \ref{fig:questionMark}, porque sino el lector no comprenderá por qué de pronto aparece la figura en el documento, lo que distraerá su atención.
-
-Otra posibilidad es utilizar el entorno \textit{subfigure} para incluir más de una figura, como se puede ver en la figura \ref{fig:three graphs}. Notar que se pueden referenciar también las figuras internas individualmente de esta manera: \ref{fig:1de3}, \ref{fig:2de3} y \ref{fig:3de3}.
- 
-\begin{figure}[!htpb]
-     \centering
-     \begin{subfigure}[b]{0.3\textwidth}
-         \centering
-         \includegraphics[width=.65\textwidth]{./Figures/questionMark}
-         \caption{Un caption.}
-         \label{fig:1de3}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.3\textwidth}
-         \centering
-         \includegraphics[width=.65\textwidth]{./Figures/questionMark}
-         \caption{Otro.}
-         \label{fig:2de3}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.3\textwidth}
-         \centering
-         \includegraphics[width=.65\textwidth]{./Figures/questionMark}
-         \caption{Y otro más.}
-         \label{fig:3de3}
-     \end{subfigure}
-        \caption{Tres gráficos simples}
-        \label{fig:three graphs}
-\end{figure}
-
-El código para generar las imágenes se encuentra disponible para su reutilización en el archivo \file{Chapter2.tex}.
-
-\subsection{Tablas}
-
-Para las tablas utilizar el mismo formato que para las figuras, sólo que el epígrafe se debe colocar arriba de la tabla, como se ilustra en la tabla \ref{tab:peces}. Observar que sólo algunas filas van con líneas visibles y notar el uso de las negritas para los encabezados.  La referencia se logra utilizando el comando \verb|\ref{<label>}| donde label debe estar definida dentro del entorno de la tabla.
-
-\begin{verbatim}
-\begin{table}[h]
-	\centering
-	\caption[caption corto]{caption largo más descriptivo}
-	\begin{tabular}{l c c}    
-		\toprule
-		\textbf{Especie}     & \textbf{Tamaño} & \textbf{Valor}\\
-		\midrule
-		Amphiprion Ocellaris & 10 cm           & \$ 6.000 \\		
-		Hepatus Blue Tang    & 15 cm           & \$ 7.000 \\
-		Zebrasoma Xanthurus  & 12 cm           & \$ 6.800 \\
-		\bottomrule
-		\hline
-	\end{tabular}
-	\label{tab:peces}
-\end{table}
-\end{verbatim}
 
 
-\begin{table}[h]
-	\centering
-	\caption[caption corto]{caption largo más descriptivo}
-	\begin{tabular}{l c c}    
-		\toprule
-		\textbf{Especie} 	 & \textbf{Tamaño} 		& \textbf{Valor}  \\
-		\midrule
-		Amphiprion Ocellaris & 10 cm 				& \$ 6.000 \\		
-		Hepatus Blue Tang	 & 15 cm				& \$ 7.000 \\
-		Zebrasoma Xanthurus	 & 12 cm				& \$ 6.800 \\
-		\bottomrule
-		\hline
-	\end{tabular}
-	\label{tab:peces}
-\end{table}
+\subsection{Hardware de desarrollo}
 
-En cada capítulo se debe reiniciar el número de conteo de las figuras y las tablas, por ejemplo, figura 2.1 o tabla 2.1, pero no se debe reiniciar el conteo en cada sección. Por suerte la plantilla se encarga de esto por nosotros.
+En primera instancia, el sistema se continua en una Raspberry Pi 3 B + para el desarrollo de los programas, la interfaz de usuario, la validación de la estructura y el flujo de trabajo. Sin embargo, debido al feedback de expertos al finalizar el trabajo de investigación \citep{cese}.
 
-\subsection{Ecuaciones}
-\label{sec:Ecuaciones}
+Basados en la experiencia durante el cursado de la maestría se decide implementar el sistema en una placa Beaglebone Black \citep{bbb}, con el objetivo de incrementar la robustez del sistema y enfocar el desarrollo a un producto final. Adicional a las mejoras de hardware, también tenemos la posibilidad de compilar de forma cruzada nuestra propia versión de Linux con las características requeridas para el sistema.
 
-Al insertar ecuaciones en la memoria dentro de un entorno \textit{equation}, éstas se numeran en forma automática  y se pueden referir al igual que como se hace con las figuras y tablas, por ejemplo ver la ecuación \ref{eq:metric}.
+\subsection{Herramienta de desarrollo de interfaz gráfica: Node-RED}
 
-\begin{equation}
-	\label{eq:metric}
-	ds^2 = c^2 dt^2 \left( \frac{d\sigma^2}{1-k\sigma^2} + \sigma^2\left[ d\theta^2 + \sin^2\theta d\phi^2 \right] \right)
-\end{equation}
-                                                        
-Es importante tener presente que si bien las ecuaciones pueden ser referidas por su número, también es correcto utilizar los dos puntos, como por ejemplo ``la expresión matemática que describe este comportamiento es la siguiente:''
+Herramienta de programación en bloque compatible con diferentes sistemas de bajo recursos. Simplifica la integración de dispositivos de hardware a través de módulos listos, que implementan los protocolos de comunicación más comunes en el ámbito industrial y de desarrollo. Además incluye módulos de generación de interfaces de usuario, que en pocos minutos establecen un servicio de hosting local con el objetivo de proveer un método de visualización y comando a partir de dispositivos con navegadores web. 
 
-\begin{equation}
-	\label{eq:schrodinger}
-	\frac{\hbar^2}{2m}\nabla^2\Psi + V(\mathbf{r})\Psi = -i\hbar \frac{\partial\Psi}{\partial t}
-\end{equation}
+\subsection{Servicio de mensajería instantánea: Telegram}
 
-Para generar la ecuación \ref{eq:metric} se utilizó el siguiente código:
-
-\begin{verbatim}
-\begin{equation}
-	\label{eq:metric}
-	ds^2 = c^2 dt^2 \left( \frac{d\sigma^2}{1-k\sigma^2} + 
-	\sigma^2\left[ d\theta^2 + 
-	\sin^2\theta d\phi^2 \right] \right)
-\end{equation}
-\end{verbatim}
-
-Y para la ecuación \ref{eq:schrodinger}:
-
-\begin{verbatim}
-\begin{equation}
-	\label{eq:schrodinger}
-	\frac{\hbar^2}{2m}\nabla^2\Psi + V(\mathbf{r})\Psi = 
-	-i\hbar \frac{\partial\Psi}{\partial t}
-\end{equation}
-
-\end{verbatim}
+Telegram corresponde al servicio de mensajería seleccionado para notificar a los usuarios de la presencia de un evento en su recinto. Telegram permite desarrollar de forma gratuita bots basados en su API, lo que brinda una atención más personalizada a los usuario y, adicionalmente, permite segmentar los servicios que proveen de forma clara. Si en dado caso se requiriera implementar nuevas funcionalidades, el esquema de trabajo de bots permite incorporar nuevas funcionalidades de forma sencilla, con la opción de habilitarlas sólo cuando estén funcionales y hayan sido testeadas correctamente.
